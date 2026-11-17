@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A Little World Made Just for You</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Inter:wght@400;500&family=Caveat:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{--pearl:#F8F1E9;--blush:#E8C5D1;--rose:#B8758D;--lav:#C9B9DE;--gold:#C5A36A;--mauve:#654456;--plum:#4A3045;--ivory:#F8F1E9;--w:#fff;color-scheme:light;
+--serif:'Cormorant Garamond',Georgia,serif;--sans:Inter,system-ui,sans-serif;--hand:Caveat,cursive}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%;background:#E8C5D1;color:var(--mauve);font-family:var(--sans);overflow-x:hidden}
+body{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+#bg{position:fixed;inset:0;background:radial-gradient(70% 50% at 20% 0,#F0D3DD,transparent),radial-gradient(70% 55% at 95% 100%,#C9B9DE,transparent),radial-gradient(90% 60% at 0 100%,#D9A9BC55,transparent),linear-gradient(180deg,#E8C5D1,#DDB4C4);z-index:0;pointer-events:none}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.p{position:absolute;top:-5vh;border-radius:100% 0 100% 0;background:linear-gradient(135deg,#fff,#F6E3E9);box-shadow:0 0 6px #fff,0 1px 4px #4a304566;animation:fall linear forwards}
+.g{border-radius:50%;background:var(--gold);box-shadow:0 0 8px var(--gold)}
+@keyframes fall{to{transform:translate(var(--dx),110vh) rotate(var(--r))}}
+.scene{position:relative;z-index:2;display:none;min-height:100svh;padding:28px 18px 90px;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:18px}
+.scene.on{display:flex;animation:in .9s ease both}
+@keyframes in{from{opacity:0;filter:blur(8px)}to{opacity:1;filter:none}}
+h1,h2{font-family:var(--serif);font-weight:700;line-height:1.05;letter-spacing:.01em;font-size:clamp(2rem,8.5vw,3.6rem);max-width:15ch;color:var(--mauve)}
+h2.sm{font-size:clamp(1.8rem,7vw,2.8rem);max-width:20ch}
+p{font-size:clamp(.98rem,3.8vw,1.12rem);line-height:1.8;max-width:34rem}
+.sub{font-family:var(--serif);font-style:italic;font-size:1.5rem}
+.sig{font-family:var(--hand);font-size:1.9rem;color:#7a3f58}
+button{font:500 1rem var(--sans);min-height:48px;padding:0 28px;border-radius:30px;border:1px solid var(--gold);background:linear-gradient(135deg,#C4829A,#B8758D 45%,#8C5069);color:#F8F1E9;cursor:pointer;box-shadow:0 8px 22px #4a304555,inset 0 1px 0 #ffffff44;transition:transform .2s,box-shadow .2s}
+button:hover{transform:translateY(-2px)}button:active{transform:scale(.97)}
+button:focus-visible,input:focus-visible,.tap:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.ghost{background:transparent;color:var(--mauve);box-shadow:none}
+input{font:1.05rem var(--sans);min-height:52px;width:min(320px,86vw);text-align:center;border-radius:26px;border:1.5px solid var(--gold);background:#F8F1E9ee;color:var(--plum);padding:0 18px;box-shadow:0 6px 16px #4a30452e,inset 0 1px 3px #4a304522}
+.err{min-height:1.6em;color:#7a2c47;font-weight:500}
+.shake{animation:sh .45s}@keyframes sh{20%,60%{transform:translateX(-9px)}40%,80%{transform:translateX(9px)}}
+/* envelope */
+.env{--s:1;position:relative;width:min(300px,78vw);aspect-ratio:3/2;perspective:900px;cursor:pointer;transition:transform .8s}
+.env .back,.env .front,.env .flap{position:absolute;inset:0}
+.env .back{background:#d6bb97;border-radius:6px;box-shadow:0 24px 44px #4a304566}
+.env .card{position:absolute;left:8%;right:8%;top:6%;bottom:6%;background:var(--pearl);border:1px solid var(--gold);border-radius:4px;display:grid;place-items:center;font:italic 1.4rem var(--serif);transition:transform 1s .5s;z-index:2}
+.env .front{z-index:3;background:linear-gradient(160deg,transparent 50%,#f4e8da 50%) , linear-gradient(-160deg,transparent 50%,#f7ede1 50%);background-size:50.5% 100%;background-position:left,right;background-repeat:no-repeat;border-radius:6px;clip-path:polygon(0 0,50% 55%,100% 0,100% 100%,0 100%);background:linear-gradient(120deg,#eedcc0,#f8eedd)}
+.env .flap{z-index:4;height:62%;bottom:auto;background:linear-gradient(#e8d3b2,#d5b98f);clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .9s,z-index 0s .45s}
+.seal{position:absolute;left:50%;top:48%;width:46px;height:46px;margin:-23px;border-radius:50%;z-index:5;background:radial-gradient(circle at 35% 30%,#ecd5a4,var(--gold) 60%,#b99a62);display:grid;place-items:center;color:#fff;box-shadow:0 4px 10px #0003;transition:opacity .4s}
+.glow .seal{box-shadow:0 0 30px 12px #ffe6a8}
+.open .seal{opacity:0}.open .flap{transform:rotateX(180deg);z-index:1}.open .card{transform:translateY(-62%)}
+.lift{transform:translateY(-10px)}
+/* flowers */
+.garden{position:relative;width:min(420px,94vw);height:230px}
+.garden svg{position:absolute;animation:sway 5s ease-in-out infinite alternate;transform-origin:50% 100%;filter:drop-shadow(0 5px 7px #4a304566)}
+@keyframes sway{to{transform:rotate(var(--a,4deg))}}
+.bloom{animation:bl 2.4s ease-out both}@keyframes bl{from{transform:scale(.2);opacity:0}}
+.card-s{background:linear-gradient(160deg,#fffdf8,var(--ivory));border:1px solid var(--gold);border-radius:6px;box-shadow:0 18px 40px #79566a1f}
+/* scratch */
+.sc{position:relative;width:min(340px,90vw);aspect-ratio:4/3;border-radius:10px;border:2px solid var(--gold);box-shadow:0 18px 40px #79566a30;overflow:hidden;background:linear-gradient(145deg,#F8F1E9,#E8C5D1)}
+.sc .under{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:10px}
+.names{font-family:var(--serif);font-weight:700;font-size:clamp(1.7rem,8vw,2.4rem);letter-spacing:.04em;text-shadow:0 0 18px #C5A36A;white-space:nowrap;color:var(--plum)}
+.names i{font-style:normal;color:var(--rose)}
+.sc canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;transition:opacity 1s}
+.hand{position:absolute;right:22%;bottom:18%;font-size:2rem;animation:hint 1.6s infinite;pointer-events:none}
+@keyframes hint{50%{transform:translate(-60px,-20px)}}
+/* letter */
+.letter{background:var(--ivory);border:1px solid var(--gold);border-radius:4px;padding:26px 22px;max-width:min(520px,94vw);text-align:left;box-shadow:0 20px 44px #79566a22;transform-origin:top;animation:unf 1s both}
+@keyframes unf{from{transform:scaleY(.1);opacity:0}}
+.letter p{font-family:var(--serif);font-size:1.2rem;line-height:1.75;margin-bottom:14px;opacity:0;animation:fadeup .9s forwards}
+@keyframes fadeup{from{transform:translateY(12px)}to{opacity:1}}
+/* doll */
+.stage{position:relative;width:260px;height:340px;perspective:700px}
+.doll{position:absolute;inset:0;transform-style:preserve-3d;animation:dsway 4s ease-in-out infinite alternate;opacity:0;transform:translateY(60px)}
+.doll.in{opacity:1;transform:none;transition:all 1.4s}
+@keyframes dsway{from{transform:rotateY(-8deg)}to{transform:rotateY(8deg)}}
+.d{position:absolute;left:50%;transform:translateX(-50%)}
+.hairb{top:34px;width:170px;height:200px;border-radius:50% 50% 40% 40%;background:radial-gradient(circle at 35% 25%,#8a5b4a,#4c2e27);transform:translateX(-50%) translateZ(-30px)}
+.body{top:188px;width:118px;height:150px;border-radius:50% 50% 14px 14px/30% 30% 14px 14px;background:radial-gradient(circle at 35% 20%,#F8F1E9,#E8C5D1 50%,#B8758D);box-shadow:inset -10px -14px 22px #79566a33;transform:translateX(-50%) translateZ(0)}
+.neck{top:172px;width:34px;height:30px;background:#f1c9b4;border-radius:0 0 12px 12px}
+.head{top:50px;width:132px;height:132px;border-radius:50% 50% 46% 46%;background:radial-gradient(circle at 35% 28%,#ffe9dc,#f5cdb8 60%,#e3ae98);box-shadow:inset -10px -12px 20px #b5705a33,0 8px 16px #0002;transform:translateX(-50%) translateZ(24px);transition:transform .8s;animation:nod 5s ease-in-out infinite}
+@keyframes nod{50%{margin-top:3px}}
+.fringe{top:42px;width:146px;height:64px;border-radius:50% 50% 30% 30%;background:radial-gradient(circle at 30% 20%,#8a5b4a,#4c2e27);clip-path:polygon(0 0,100% 0,100% 70%,80% 100%,60% 60%,40% 100%,20% 60%,0 80%);transform:translateX(-50%) translateZ(40px);transition:transform .8s}
+.bow{top:30px;left:66%;font-size:1.6rem;transform:translateZ(50px)}
+.face{position:absolute;inset:0;transition:transform .8s}
+.eye{position:absolute;top:56px;width:18px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0 18%,#5a3a4a 20%,#2b1822);animation:blink 4.5s infinite;transform-origin:center}
+.eye.l{left:30px}.eye.r{right:30px}
+@keyframes blink{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.08)}}
+.ch{position:absolute;top:84px;width:26px;height:16px;border-radius:50%;background:#ff8fa8;opacity:0;filter:blur(5px);transition:opacity 1.2s}
+.ch.l{left:14px}.ch.r{right:14px}
+.mouth{position:absolute;left:50%;top:96px;width:22px;height:10px;margin-left:-11px;border-bottom:3px solid #c0546e;border-radius:0 0 22px 22px;transition:all .5s}
+.shy .ch{opacity:.9}.look .head,.look .fringe{transform:translateX(-50%) translateZ(24px) rotateX(18deg)}
+.look .eye{transform:translateY(8px) scaleY(.5)}
+.smile .mouth{width:32px;margin-left:-16px;height:14px}
+.arm{top:150px;width:30px;height:96px;border-radius:30px;background:radial-gradient(circle at 30% 20%,#ffe9dc,#e8b49e);transform-origin:50% 90%;transition:all .8s;z-index:3}
+.arm.l{left:calc(50% - 62px);transform:rotate(14deg)}.arm.r{left:calc(50% + 32px);transform:rotate(-14deg)}
+.hide .arm{top:98px;height:70px}.hide .arm.l{left:calc(50% - 36px);transform:rotate(58deg) translateZ(70px)}.hide .arm.r{left:calc(50% + 6px);transform:rotate(-58deg) translateZ(70px)}
+.react{animation:pop .7s}@keyframes pop{40%{transform:scale(1.08) rotate(-3deg)}}
+/* 3D cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;width:min(920px,100%)}
+.fc{perspective:900px;aspect-ratio:3/4;cursor:pointer;background:none;border:0;padding:0;box-shadow:none;min-height:0;border-radius:0}
+.fc .in{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.3,.7,.2,1)}
+.fc.flip .in{transform:rotateY(180deg)}
+.fc .f,.fc .b{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:14px;border:1px solid var(--gold);box-shadow:0 12px 26px #79566a22}
+.fc .f{background:var(--cbg)}.fc .f svg{width:56px;height:56px}
+.fc .f b{font:700 1.1rem var(--serif);color:var(--mauve)}
+.fc .b{transform:rotateY(180deg);background:linear-gradient(160deg,#654456,#4A3045);font:italic 1.05rem/1.5 var(--serif);color:#F8F1E9}
+/* reasons */
+.fl{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:12px;width:min(640px,100%)}
+.bud{background:none;border:0;box-shadow:none;color:inherit;padding:8px;display:flex;flex-direction:column;align-items:center;gap:6px;min-height:150px;justify-content:flex-start}
+.bud svg{width:64px;height:64px;transition:transform 1s;filter:drop-shadow(0 4px 6px #4a304566)}
+.bud span{font:italic 1rem/1.35 var(--serif);opacity:0;transition:opacity .8s .4s}
+.bud.o span{opacity:1}
+.bud:not(.o) svg{transform:scale(.55)}
+.msg{font-family:var(--serif);font-size:1.25rem;min-height:2em}
+.row{display:grid;gap:12px;width:min(520px,100%)}
+.mini{background:linear-gradient(160deg,#F8F1E9,#EBD0DA);border:1px solid var(--gold);color:var(--mauve);box-shadow:0 10px 22px #4a30452e;border-radius:8px;padding:14px;min-height:80px;font-family:var(--serif);font-size:1.15rem}
+.mini span{display:block;font:italic 1rem/1.5 var(--serif);max-height:0;overflow:hidden;opacity:0;transition:all .6s}
+.mini.o span{max-height:8em;opacity:1;margin-top:8px}
+.path{width:min(300px,80vw);height:110px}
+.heartbg{position:fixed;left:50%;top:45%;font-size:min(80vw,420px);transform:translate(-50%,-50%);color:#B8758D44;z-index:0;animation:beat 3s infinite;pointer-events:none;line-height:1}
+@keyframes beat{50%{transform:translate(-50%,-50%) scale(1.06)}}
+/* nav + music */
+#music{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:20;display:flex;gap:6px;background:linear-gradient(135deg,#654456f2,#4A3045f2);border:1px solid var(--gold);border-radius:30px;padding:4px;backdrop-filter:blur(8px)}
+#music button{min-height:44px;min-width:44px;padding:0;background:transparent;color:#F8F1E9;box-shadow:none;border:0;font-size:1.1rem}
+.hug{position:fixed;inset:0;z-index:30;display:none;flex-direction:column;align-items:center;justify-content:center;background:#E8C5D1f2;font-size:min(60vw,300px);animation:in 1s}
+.hug.on{display:flex}.hug em{font:italic 700 1.5rem/1.4 var(--serif);max-width:20rem;padding:0 16px;color:var(--mauve);text-align:center}
+.hug>span{animation:beat2 1.6s infinite;line-height:1.1}@keyframes beat2{50%{transform:scale(1.12)}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-iteration-count:1!important;transition-duration:.01s!important}}
+</style></head><body>
+<div id="bg"></div><div id="fx" aria-hidden="true"></div>
+<div id="music"><button id="mp" aria-label="Music play ya pause">♪</button><button id="mm" aria-label="Mute ya unmute">🔈</button></div>
+
+<main id="app">
+<!-- 1 -->
+<section class="scene on" id="s0"><h1>A Special Surprise Awaits</h1>
+<div class="env" id="env" role="button" tabindex="0" aria-label="Envelope kholo"><div class="back"></div><div class="card">Sarah ❤️</div><div class="front"></div><div class="flap"></div><div class="seal">♥</div></div>
+<p>Sarah, tumhare liye ek choti si surprise duniya tayyar ki gayi hai. Isay kholne ke liye bas ek chota sa step complete karna hai. ❤️</p>
+<button id="openBtn">Open Your Surprise 💌</button></section>
+<!-- 2 -->
+<section class="scene" id="s1"><h2>A Little Secret</h2><div id="lock" style="font-size:3.2rem">🔒</div>
+<p style="font-family:var(--serif);font-size:1.4rem">Apne Lover Ka Naam Enter Karo ❤️</p>
+<input id="pw" placeholder="Yahan naam likho..." autocomplete="off" autocapitalize="off" aria-label="Naam"><div class="err" id="err" role="alert"></div>
+<button id="unlock">Unlock My Surprise ✨</button></section>
+<!-- 3 -->
+<section class="scene" id="s2"><h1>A Little World of Love</h1><div class="sub">Made With Love, Just For Sarah</div><div class="garden" data-g="3"></div>
+<p>Sarah, yeh choti si duniya sirf tumhare liye banayi gayi hai. Is mein meri feelings, meri mohabbat aur tumhare liye kuch khaas surprises chhupe hain. Bas araam se explore karo aur har surprise ko enjoy karo. ❤️</p>
+<div class="sig">With Love, Ahsin ❤️</div><button class="nx">Explore Our Little World</button></section>
+<!-- 4 -->
+<section class="scene" id="s3"><h2>A Garden Full of Love</h2><div class="garden" data-g="6"></div>
+<p>Agar meri feelings ko phoolon mein badla ja sakta, toh yeh poori duniya tumhare liye phoolon se saja deta. Tum meri zindagi ka woh khoobsurat hissa ho jo har din ko khaas bana deta hai. ❤️</p><button class="nx">Aage Chalo</button></section>
+<!-- 5 -->
+<section class="scene" id="s4"><h2 class="sm">A Little Secret For You</h2>
+<p>Is Card Ke Andar Ek Khaas Surprise Chhupa Hai. Scratch Karo Aur Dekho! 🙈</p>
+<div class="sc" id="sc"><div class="under"><div class="names" id="nm">AHSIN <i>❤️</i> SARAH</div><p style="font-family:var(--serif);font-style:italic;font-size:1.1rem">Do Naam, Ek Khoobsurat Kahani. ❤️</p></div><canvas id="cv" aria-label="Scratch card"></canvas><div class="hand" id="hand">👆</div></div>
+<button class="ghost" id="rv">Reveal It For Me</button><button class="nx" id="scnx" style="display:none">Aage Chalo</button></section>
+<!-- 6 -->
+<section class="scene" id="s5"><h2 class="sm">A Letter From My Heart</h2>
+<div class="env" id="env2" role="button" tabindex="0" aria-label="Letter kholo"><div class="back"></div><div class="card">❤️</div><div class="front"></div><div class="flap"></div><div class="seal">♥</div></div>
+<p id="lh">Letter kholne ke liye envelope par tap karo. 💌</p><div id="lt"></div><button class="nx" id="ltnx" style="display:none">Aage Chalo</button></section>
+<!-- 7 -->
+<section class="scene" id="s6"><h2 class="sm">Someone Is Blushing 🙈</h2>
+<div class="stage"><div class="doll" id="doll"><div class="d hairb"></div><div class="d body"></div><div class="d neck"></div><div class="d head"><div class="face" id="face"><div class="eye l"></div><div class="eye r"></div><div class="ch l"></div><div class="ch r"></div><div class="mouth"></div></div></div><div class="d fringe"></div><div class="d bow">🎀</div><div class="d arm l"></div><div class="d arm r"></div></div></div>
+<p>Lagta hai Sarah kisi ke khayalon mein kho gayi hai. 🙈 Jab Ahsin ka naam samne aaye toh sharmana toh banta hai na? ❤️</p>
+<button id="cute">Aww, Kitni Cute! 💗</button><button class="nx ghost">Aage Chalo</button></section>
+<!-- 8 -->
+<section class="scene" id="s7"><h2 class="sm">Little Things I Adore About You</h2><div class="grid" id="cards"></div><button class="nx">Aage Chalo</button></section>
+<!-- 9 -->
+<section class="scene" id="s8"><h2 class="sm">Reasons You Are So Special</h2><p>Har phool par tap karo aur dekho. 🌸</p><div class="fl" id="fl"></div><button class="nx">Aage Chalo</button></section>
+<!-- 10 -->
+<section class="scene" id="s9"><h2 class="sm">A Beautiful Story Yet To Come</h2>
+<svg class="path" viewBox="0 0 300 110" aria-hidden="true"><defs><linearGradient id="pg" x1="0" x2="1"><stop offset="0" stop-color="#fff0"/><stop offset=".5" stop-color="#C5A36A"/><stop offset="1" stop-color="#fff0"/></linearGradient></defs><path d="M10 100 Q150 20 290 100" fill="none" stroke="url(#pg)" stroke-width="5"/><text x="118" y="52" font-size="32" fill="#8C5069">♥</text><text x="150" y="44" font-size="26" fill="#D8BD8A">♥</text></svg>
+<p>Main chahta hoon ke hamari kahani hamesha isi tarah khoobsurat rahe. Zindagi mein chahe kitne bhi challenges aayein, hum ek doosre ko samajhte rahein, support karte rahein aur har achay buray waqt mein ek doosre ka saath dein.<br><br>Abhi bohat si khoobsurat yaadein banana baqi hain. ❤️</p>
+<div class="row" id="mini"></div><button class="nx">Aage Chalo</button></section>
+<!-- 11 -->
+<section class="scene" id="s10"><div class="heartbg">♥</div><h1>You Are My Favourite Person ❤️</h1><div class="garden" data-g="5"></div>
+<p>Sarah, yeh website sirf ek surprise nahi, balkay meri taraf se tumhare liye ek chota sa izhar hai.<br><br>Main chahta hoon ke tum hamesha khush raho aur tumhari zindagi mein har din naye rang aur khushiyan lekar aaye.<br><br>Tum meri kahani ka bohat khoobsurat hissa ho. Main chahta hoon ke hamari kahani mein hamesha mohabbat, trust aur khushiyan rahen.<br><br>Hamesha meri favourite rehna. ❤️</p>
+<div class="sig">With Endless Love, Ahsin ❤️</div><button id="hugb">Send Me A Hug 🤗</button></section>
+</main>
+<div class="hug" id="hug"><span>❤️</span><em>Yeh lo Ahsin ki taraf se ek bohat pyara sa hug! 🤗❤️</em><button class="ghost" id="hx" style="margin-top:16px">Wapas Jao</button></div>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+let cur=0;
+function go(n){$$('.scene').forEach(s=>s.classList.remove('on'));cur=n;$('#s'+n).classList.add('on');scrollTo(0,0);if(n>=2&&n!==4)petals(10);if(n===6)dollSeq();if(n===4)initScratch()}
+$$('.nx').forEach(b=>b.onclick=()=>go(cur+1));
+/* fx */
+function petals(n,gold){if(RM)return;const f=$('#fx');for(let i=0;i<n;i++){const p=document.createElement('span');p.className='p'+(gold&&i%3==0?' g':'');const s=gold&&i%3==0?5+Math.random()*4:10+Math.random()*14;p.style.cssText=`left:${Math.random()*100}vw;width:${s}px;height:${s}px;--dx:${Math.random()*120-60}px;--r:${Math.random()*720}deg;animation-duration:${7+Math.random()*8}s;animation-delay:${Math.random()*3}s`;f.appendChild(p);setTimeout(()=>p.remove(),17000)}}
+petals(8,1);setInterval(()=>{if(document.hidden||cur===4)return;petals(2,1)},3000);
+/* flowers */
+function rose(c,sz,id){let s=`<svg viewBox="-50 -50 100 100" width="${sz}" height="${sz}">`,r=44;for(let i=0;i<5;i++){s+=`<g transform="rotate(${i*72+id*13})"><ellipse cx="0" cy="-${r*.55}" rx="${r*.36}" ry="${r*.5}" fill="#fff" stroke="#e9dccf" stroke-width=".8"/></g>`;}
+for(let i=0;i<5;i++)s+=`<g transform="rotate(${i*72+36+id*7}) scale(.68)"><ellipse cx="0" cy="-22" rx="16" ry="23" fill="#fffdf8" stroke="#eadfd0" stroke-width=".8"/></g>`;
+for(let i=0;i<4;i++)s+=`<g transform="rotate(${i*90+id*20}) scale(${.42-i*.03})"><ellipse cx="0" cy="-16" rx="14" ry="18" fill="#fff" stroke="${i%2?'#e9d7dc':'#e4d4c0'}" stroke-width="1.2"/></g>`;
+return s+`<circle r="5" fill="#f6dfe6"/><circle r="2" fill="${c}"/></svg>`}
+function jas(sz,id){let s=`<svg viewBox="-30 -30 60 60" width="${sz}" height="${sz}">`;for(let i=0;i<5;i++)s+=`<ellipse transform="rotate(${i*72+id*9})" cx="0" cy="-13" rx="6.5" ry="14" fill="#fff" stroke="#e8e0d5" stroke-width=".7"/>`;return s+`<circle r="4" fill="#D8BD8A"/></svg>`}
+$$('.garden').forEach(g=>{const n=+g.dataset.g;let h='';for(let i=0;i<n;i++){const x=6+i*(86/(n-1||1)),y=(i%2)*40+(i%3)*18,t=i%3,sz=t==1?46:(t?60:84);h+=`<div class="${RM?'':'bloom'}" style="position:absolute;left:${x}%;top:${y}px;animation-delay:${i*.25}s">${t==1?jas(sz,i):rose('#D8BD8A',sz,i)}</div>`}
+g.innerHTML=h;[...g.children].forEach((c,i)=>{c.firstChild.style.cssText=`position:static;--a:${i%2?5:-5}deg;animation-duration:${4+i}s`})});
+/* envelope 1 */
+let opened=0;function openEnv(){if(opened)return;opened=1;const e=$('#env');e.classList.add('lift','glow');setTimeout(()=>e.classList.add('open'),700);setTimeout(()=>go(1),2500)}
+$('#env').onclick=$('#openBtn').onclick=openEnv;$('#env').onkeydown=e=>{if(e.key==='Enter'||e.key===' ')openEnv()};
+/* password */
+function tryUnlock(){const v=$('#pw').value.trim().toLowerCase();if(v==='ahsin'){$('#lock').textContent='🔓';$('#err').textContent='';petals(30,1);sound(1);setTimeout(()=>go(2),1400)}else{$('#err').textContent='Oops! Dobara socho, tumhein jawab pata hai. 🙈';const i=$('#pw');i.classList.remove('shake');void i.offsetWidth;i.classList.add('shake')}}
+$('#unlock').onclick=tryUnlock;$('#pw').onkeydown=e=>{if(e.key==='Enter')tryUnlock()};
+/* scratch */
+let sInit=0,done=0;
+function initScratch(){if(sInit)return;sInit=1;const c=$('#cv'),x=c.getContext('2d',{willReadFrequently:true}),box=$('#sc');let drawing=0,last,cnt=0;
+function paint(){const r=box.getBoundingClientRect(),d=devicePixelRatio||1;c.width=r.width*d;c.height=r.height*d;x.setTransform(d,0,0,d,0,0);const g=x.createLinearGradient(0,0,r.width,r.height);g.addColorStop(0,'#D2B67F');g.addColorStop(.5,'#E8D3A2');g.addColorStop(1,'#A88347');x.fillStyle=g;x.fillRect(0,0,r.width,r.height);x.strokeStyle='#fff8';x.lineWidth=1;for(let i=0;i<r.width;i+=14){x.beginPath();x.moveTo(i,0);x.lineTo(i-30,r.height);x.stroke()}x.fillStyle='#fff';x.font='700 44px serif';x.textAlign='center';x.fillText('♥',r.width/2,r.height/2+8);x.font='500 15px Inter';x.fillStyle='#4A3045';x.fillText('Yahan scratch karo',r.width/2,r.height/2+40)}
+paint();
+function pos(e){const r=c.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top]}
+function line(a,b){x.globalCompositeOperation='destination-out';x.lineWidth=34;x.lineCap='round';x.beginPath();x.moveTo(a[0],a[1]);x.lineTo(b[0],b[1]);x.stroke()}
+function check(){const r=c.getBoundingClientRect(),w=Math.max(1,Math.floor(c.width/10)),h=Math.max(1,Math.floor(c.height/10)),d=x.getImageData(0,0,c.width,c.height).data;let t=0,k=0;for(let j=0;j<c.height;j+=10)for(let i=0;i<c.width;i+=10){k++;if(d[(j*c.width+i)*4+3]<30)t++}if(t/k>.5)finish()}
+c.onpointerdown=e=>{if(done)return;drawing=1;c.setPointerCapture(e.pointerId);last=pos(e);line(last,last);$('#hand').style.display='none'};
+c.onpointermove=e=>{if(!drawing||done)return;const p=pos(e);line(last,p);last=p;if(++cnt%8===0)check()};
+c.onpointerup=c.onpointercancel=()=>{drawing=0;if(!done)check()};
+window.finish=()=>{if(done)return;done=1;c.style.opacity=0;setTimeout(()=>c.style.display='none',1000);$('#hand').style.display='none';$('#rv').style.display='none';$('#scnx').style.display='';$('#nm').style.animation='pop 1s';petals(30,1)};
+$('#rv').onclick=finish;let t;addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(()=>{if(!done)paint()},200)})}
+/* letter */
+const L=["Sarah,","Pata nahi main apni feelings ko lafzon mein kitni achi tarah bayan kar sakta hoon, lekin itna zaroor janta hoon ke tum meri zindagi ke sab se khoobsurat ehsaason mein se ek ho.","Tumhari muskurahat, tumhari baatein aur tumhara andaaz mere liye bohat khaas hain. Tumhare saath guzara hua har lamha meri yaadon ka khoobsurat hissa hai.","Main chahta hoon ke tum hamesha khush raho, tumhare har khwab ko kamyabi mile aur tumhari zindagi mein kabhi khushiyon ki kami na ho.","Ho sakta hai main har baar apni feelings express na kar paun, lekin tum mere liye bohat special ho.","Tumhari khushi mere liye bohat qeemti hai. Main chahta hoon ke hamari kahani mein hamesha mohabbat, trust aur ek doosre ki izzat rahe.","Hamesha khush rehna, meri favourite person. ❤️","Hamesha tumhara,<br>Ahsin ❤️"];
+let lo=0;function openLetter(){if(lo)return;lo=1;const e=$('#env2');e.classList.add('glow');setTimeout(()=>e.classList.add('open'),600);$('#lh').style.display='none';setTimeout(()=>{e.style.display='none';$('#lt').innerHTML='<div class="letter">'+L.map((t,i)=>`<p style="animation-delay:${i*.9}s">${t}</p>`).join('')+'</div>';setTimeout(()=>$('#ltnx').style.display='',L.length*900)},1900)}
+$('#env2').onclick=openLetter;$('#env2').onkeydown=e=>{if(e.key==='Enter'||e.key===' ')openLetter()};
+/* doll */
+let dt=[];function dollSeq(){dt.forEach(clearTimeout);const d=$('#doll'),f=$('#face');d.className='doll';f.parentElement.parentElement.className='doll';const D=d;D.classList.remove('in','shy','look','hide','smile');
+const st=[[300,'in'],[2000,'shy'],[3200,'look'],[4600,'hide'],[7000,'-hide'],[7000,'-look'],[7300,'smile']];st.forEach(([t,c])=>dt.push(setTimeout(()=>c[0]=='-'?D.classList.remove(c.slice(1)):D.classList.add(c),t)))}
+$('#cute').onclick=()=>{const d=$('#doll');d.classList.remove('smile');d.classList.add('hide','look');petals(12);setTimeout(()=>d.classList.remove('hide','look'),1800);setTimeout(()=>d.classList.add('smile'),2000)};
+/* 3D cards */
+const C=[["Your Beautiful Smile","Tumhari muskurahat mere din ko khoobsurat bana deti hai.",'#F8E8EE'],["Your Caring Heart","Tumhara caring nature tumhein sab se alag banata hai.",'#EEEAFB'],["Your Cute Nature","Tumhari choti choti baatein bhi mere chehre par smile le aati hain.",'#F7F1E9'],["Your Beautiful Eyes","Tumhari aankhon mein ek alag hi khoobsurati hai.",'#EEEAFB'],["Your Sweet Voice","Tumhari awaaz sun kar dil ko sukoon milta hai.",'#F8E8EE'],["Our Memories","Hamari choti choti yaadein mere liye bohat qeemti hain.",'#F7F1E9'],["My Favourite Person","Duniya mein bohat se log hain, lekin tum meri favourite ho.",'#F8E8EE'],["Just Being You","Tum jaisi ho, bilkul waisi hi bohat special ho.",'#EEEAFB']];
+const IC=['<path d="M12 40q20 18 40 0" fill="none" stroke="#C98FA3" stroke-width="3"/><circle cx="22" cy="24" r="3" fill="#79566A"/><circle cx="42" cy="24" r="3" fill="#79566A"/>','<path d="M32 52C10 36 12 16 24 16c5 0 8 3 8 6 0-3 3-6 8-6 12 0 14 20-8 36z" fill="#C98FA3"/>','<circle cx="32" cy="32" r="18" fill="#fff" stroke="#D8BD8A" stroke-width="2"/><circle cx="25" cy="29" r="2.5" fill="#79566A"/><circle cx="39" cy="29" r="2.5" fill="#79566A"/><circle cx="21" cy="37" r="4" fill="#F8C6D4"/><circle cx="43" cy="37" r="4" fill="#F8C6D4"/>','<path d="M8 32q24-26 48 0q-24 26-48 0z" fill="#fff" stroke="#D8BD8A" stroke-width="2"/><circle cx="32" cy="32" r="9" fill="#79566A"/><circle cx="29" cy="29" r="3" fill="#fff"/>','<path d="M16 24v16M26 16v32M36 22v20M46 12v40" stroke="#C98FA3" stroke-width="4" stroke-linecap="round"/>','<rect x="12" y="18" width="40" height="30" rx="3" fill="#fff" stroke="#D8BD8A" stroke-width="2"/><circle cx="32" cy="32" r="7" fill="#EEEAFB" stroke="#79566A" stroke-width="2"/>','<path d="M32 8l7 16 17 2-13 12 4 17-15-9-15 9 4-17L8 26l17-2z" fill="#D8BD8A"/>','<circle cx="32" cy="32" r="8" fill="#D8BD8A"/>'+[0,1,2,3,4,5].map(i=>`<ellipse transform="rotate(${i*60} 32 32)" cx="32" cy="14" rx="7" ry="11" fill="#fff" stroke="#C98FA3"/>`).join('')];
+$('#cards').innerHTML=C.map((c,i)=>`<button class="fc" aria-label="${c[0]}"><div class="in"><div class="f" style="--cbg:linear-gradient(${150+i*20}deg,${{'#F8E8EE':'#EBBFCE','#EEEAFB':'#CDBEE2','#F7F1E9':'#F8F1E9'}[c[2]]},#F8F1E9)"><svg viewBox="0 0 64 64">${IC[i]}</svg><b>${c[0]}</b></div><div class="b">${c[1]}</div></div></button>`).join('');
+$$('.fc').forEach(b=>b.onclick=()=>b.classList.toggle('flip'));
+/* reasons */
+const R=["Tumhari masoomiyat.","Tumhari pyari si muskurahat.","Tumhara khoobsurat dil.","Tumhara caring nature.","Tumhari cute si narazgi.","Tumhara mujhe samajhna.","Tumhara meri zindagi mein hona."];
+$('#fl').innerHTML=R.map((r,i)=>`<button class="bud" aria-label="Phool kholo">${i%2?jas(64,i):rose('#D8BD8A',64,i)}<span>${r}</span></button>`).join('');
+$$('.bud').forEach((b,i)=>b.onclick=()=>{const k=['transform .9s cubic-bezier(.3,1.8,.5,1)','transform 1.4s ease','transform .7s ease-out'][i%3];b.firstChild.style.transition=k;b.classList.add('o');b.firstChild.style.transform=`scale(1.1) rotate(${i%2?72:-40}deg)`;petals(5)});
+/* future */
+const M=[["More Beautiful Memories","Abhi saath mil kar bohat si pyari yaadein banani hain."],["Endless Smiles","Tumhari muskurahat hamesha yunhi qayam rahe."],["Always Together","Har mushkil aur har khushi mein ek doosre ka saath dete rahein."]];
+$('#mini').innerHTML=M.map(m=>`<button class="mini">${m[0]}<span>${m[1]}</span></button>`).join('');$$('.mini').forEach(b=>b.onclick=()=>b.classList.toggle('o'));
+/* hug */
+$('#hugb').onclick=()=>{$('#hug').classList.add('on');petals(60,1);const n=setInterval(()=>petals(8,1),900);$('#hx').onclick=()=>{clearInterval(n);$('#hug').classList.remove('on')}};
+/* music: original soft generated pad, starts only on tap */
+let ac,mg,pl=0,mu=0;
+function sound(auto){}
+function start(){if(!ac){ac=new(window.AudioContext||window.webkitAudioContext)();mg=ac.createGain();mg.gain.value=.0;mg.connect(ac.destination);const ch=[[261.6,329.6,392],[220,261.6,329.6],[174.6,220,261.6],[196,246.9,293.7]];let k=0;const play=()=>{if(!pl)return;const t=ac.currentTime;ch[k++%4].forEach(f=>{const o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.12,t+1.5);g.gain.linearRampToValueAtTime(0,t+5);o.connect(g);g.connect(mg);o.start(t);o.stop(t+5.1)})};play();setInterval(play,4500)}
+ac.resume();pl=1;mg.gain.value=mu?0:1;$('#mp').textContent='❚❚'}
+$('#mp').onclick=()=>{if(!pl){start()}else{pl=0;ac.suspend();$('#mp').textContent='♪';return}};
+$('#mp').addEventListener('click',()=>{if(pl&&ac.state!=='running')ac.resume()});
+$('#mm').onclick=()=>{mu=!mu;if(mg)mg.gain.value=mu?0:1;$('#mm').textContent=mu?'🔇':'🔈'};
+</script></body></html>
